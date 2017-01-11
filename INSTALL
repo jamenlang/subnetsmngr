@@ -1,0 +1,28 @@
+New install:
+
+1) Move subnetsmngr tarball into your web root and extract it (tar -xzf subnetsmngr-3.0.tar.gz)
+2) Create PostgreSQL database and user
+3) Create database structure by importing subnetsmngr-v3.0.sql included in distribution (psql <dbname> < subnetsmngr-v3.0.sql)
+4) Edit inc/config.php
+5) Go to http://yourdomain/subnetsmngr and login with admin/admin (change password after logging in)
+
+
+Upgrade from v1.5 to 2.0:
+
+Version 2.0 uses PostgreSQL instead of MySQL as the backend.  You'll have to migrate that data
+using the script mysql_to_pgsql.php.
+
+1) Make backup of your database and previous install files in case anything goes wrong
+2) Follow directions for "New install"
+3) Run mysql_to_pgsql.php to import your data from mysql to pgsql, then delete the file.
+
+
+Upgrade from v2.0 to 3.0:
+
+1) Make backup of your database and previous install files in case anything goes wrong
+2) Run the following SQL to add new columns:
+
+    alter table groups add column lat double precision;
+    alter table groups add column lng double precision;
+
+3) Copy all new code into your public/htdocs directory

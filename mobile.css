@@ -1,0 +1,74 @@
+section#loginbox {
+    padding: 24px;
+    width: 200px;
+}
+body {
+	background-image: none;
+}
+header {
+	height:95px;
+}
+header .logo {
+	margin:0;
+	text-align:center;
+	float:none;
+	margin-top: 11px;
+}
+header .search {
+	margin:0;
+	margin-top: 10px;
+	text-align:center;
+	float:none;
+}
+header .search input {
+	margin: 0;
+	padding: 4px;
+	border: 1px solid #666;
+	background-color: #000;
+	color: #eee;
+	font-size: 10pt;
+}
+header .show-menu {
+	margin:0;
+	padding:0;
+	position:absolute;
+	top: 20px;
+	left: 8px;
+	display: block;
+	width: 42px;
+	height: 42px;
+	background:url(img/show-menu-icon.png);
+	cursor: pointer;
+}
+aside.rightbar {
+	float:none;
+	margin-bottom:8px;
+	display:block;
+	width:100%;
+}
+aside.leftbar {
+	float:none;
+	margin-bottom:8px;
+	display:none;
+	width:100%;
+}
+.content {
+	margin:0;
+}
+.showused {
+	display: none;
+}
+table {
+	display: block;
+	overflow: auto;
+}
+td, th {
+        border: none;
+}
+/* 'unnecessary' elements */
+.un {
+	display: none;
+}
+form.general .label {
+	width:150px;
+}
