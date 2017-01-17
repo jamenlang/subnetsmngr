@@ -25,6 +25,42 @@ if (isset($_SESSION['user'])) header("Location: index.php");
 
 if ($_POST)
 {
+	if($config['adServer']){
+		$ldap = ldap_connect($config['adServer']);
+		$username = $_POST['username'];
+		$password = $_POST['password'];
+
+		$ldaprdn = $config['adDomain'] . "\\" . $username;
+
+		ldap_set_option($ldap, LDAP_OPT_PROTOCOL_VERSION, 3);
+		ldap_set_option($ldap, LDAP_OPT_REFERRALS, 0);
+
+		$bind = @ldap_bind($ldap, $ldaprdn, $password);
+
+		if ($bind) {
+			$filter="(sAMAccountName=$username)";
+			$result = ldap_search($ldap,"dc=$config[dc1],dc=$config[dc2]",$filter);
+			ldap_sort($ldap,$result,"sn");
+			$info = ldap_get_entries($ldap, $result);
+			for ($i=0; $i<$info["count"]; $i++)
+			{
+				if($info['count'] > 1)
+					break;
+				//find out if the user exists
+				if (@pg_num_rows(@pg_query("select id from users where username = '$_POST[username]'")) == 1){
+					$sql = "update users set name = '" . $info[$i]["givenname"][0] . "', password = '" . md5($_POST['password']) ."'";
+					$sql .= " where username = '$_POST[username]'";
+					@pg_query($sql) or die("error: failed to run query: $sql");
+				}else{
+					//create new user with supplied password
+					$sql = "insert into users (name, username, password) values('" . $info[$i]["givenname"][0] . "', '$_POST[username]', md5('$_POST[password]'))";
+					@pg_query($sql) or die("error: failed to run query: $sql");
+				}
+			}
+			@ldap_close($ldap);
+		}
+	}
+	
 	$sql = "select id, default_instance_id from users where username = '{$_POST['username']}' and password = MD5('{$_POST['password']}')";
 	$result = @pg_query($sql) or die("error: failed to run query: $sql");
 	if (pg_num_rows($result) == 0)
@@ -35,6 +71,7 @@ if ($_POST)
 		$_SESSION['user'] = array(
 			'id' => $row['id'],
 			'username' => $_POST['username'],
+			'password' => $_POST['password'],
 			'instance_id' => $row['default_instance_id']
 		);
 		
