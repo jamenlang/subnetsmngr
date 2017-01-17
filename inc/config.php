@@ -38,6 +38,12 @@ $config = array(
 	'pdns_mysql_db' => 'pdns',
 	*/
 	
+	/* Active Directory integration */
+	'adServer' => 'ldap://host.com',
+        'adDomain' => 'Domain',
+        'dc1' => 'host',
+        'dc2' => 'com',
+	
 	/*
 	 * Route Check configuration
 	 * this is currently only tested using a Juniper MX router
