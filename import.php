@@ -51,6 +51,7 @@ if ($_POST){
 			if($column_name == 'ip')
 				$ip = $line_array[$id];
 		}
+		//no range support
 		if(stristr($ip,'-'))
 			continue;
 		
@@ -58,7 +59,7 @@ if ($_POST){
 		$notes = pg_escape_string($notes);
 		
 		if(!$ip){
-			$_SESSION['error_msg'] .= 'Host missing in ' . $description . '/' . $notes . ' line, skipping.';
+			//$_SESSION['error_msg'] .= 'Host missing in ' . $description . '/' . $notes . ' line, skipping.';
 			continue;
 		}
 		
