@@ -53,13 +53,14 @@ if ($_POST){
 		}
 		if(stristr($ip,'-'))
 			continue;
+		
+		$description = pg_escape_string($description);
+		$notes = pg_escape_string($notes);
+		
 		if(!$ip){
 			$_SESSION['error_msg'] .= 'Host missing in ' . $description . '/' . $notes . ' line, skipping.';
 			continue;
 		}
-		
-		$description = pg_escape_string($description);
-		$notes = pg_escape_string($notes);
 		
 		if (!ip_in_network($ip, $_POST['subnet_addr']))
 			$_SESSION['error_msg'] .= 'Host ' . $ip . ' is not within subnet ' . $_POST['subnet_addr'] . '.';
@@ -70,19 +71,19 @@ if ($_POST){
 			if (pg_num_rows($result) == 1) {
 				if (isset($_POST['overwrite'])){
 					$_SESSION['notice_msg'] .= 'Host ' . $ip . ' already exists, overwriting.';
-					$sql = "update hosts set free = '" . (isset($_POST['used']) ? '0' : '1') . "', description = '$desc', " .
-						"notes = '$_POST[notes]', last_updated = now(), last_updated_user_id = '{$_SESSION['user']['id']}', gateway = '" . 
+					$sql = "update hosts set free = '" . (isset($_POST['used']) ? '0' : '1') . "', description = '$description', " .
+						"notes = '$notes', last_updated = now(), last_updated_user_id = '{$_SESSION['user']['id']}', gateway = '" . 
 						(isset($_POST['gateway']) && $_POST['gateway'] ? 1 : 0) . "' where addr = '{$ip}' and subnet_id = '$_GET[subnet_id]'";
 				}
 			} else
 			{
 				$sql = "insert into hosts (subnet_id, addr, free, gateway, description, notes, last_updated, last_updated_user_id, created, created_user_id) values(
 					'{$_GET['subnet_id']}', 
-					'{$_POST['addr']}', 
+					'{$ip}', 
 					'" . (isset($_POST['used']) ? '0' : '1')  . "', 
 					'" . (isset($_POST['gateway']) ? 1 : 0) . "', 
-					'" . $desc . "',
-					'{$_POST['notes']}',
+					'" . $description . "',
+					'{$notes}',
 					now(), 
 					'{$_SESSION['user']['id']}',
 					now(), 
