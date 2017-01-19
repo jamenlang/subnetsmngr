@@ -32,7 +32,7 @@ if ($_POST){
 		//the data is now in 3 columns.
 		if($_POST['delimiter'] == '  '){
       			/* hack, excel columns were not copied with two or more spaces before the ip column. */
-			$line = preg_replace('/\s(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\s/','#$#' . "$1" . '#$#',$line,1);
+			$line = preg_replace('/\s?(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\s?/','#$#' . "$1" . '#$#',$line,1);
 			$line = preg_replace('/\s{2,}/','#$#',$line);
 			$line = preg_replace('/#\$##\$#/','#$#',$line);
 			$new_delimiter = '#$#';
