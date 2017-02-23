@@ -23,7 +23,7 @@ require('inc/global.php');
 
 $default_instance = 'demo';
 
-$sql = "insert into instances (name = '{$default_instance}');";
+$sql = "insert into instances (name) values ('{$default_instance}');";
 @pg_query($sql) or die("failed to run query: $sql");
 
 $sql = "update users set default_instance_id = '{$default_instance}' where id = '1';";
