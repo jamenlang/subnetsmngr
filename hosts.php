@@ -135,7 +135,7 @@ if ($action == 'main')
 			if (!$config['dnslookup_for_private'] && (ip_in_network($host['addr'], '10.0.0.0/8') || ip_in_network($host['addr'], '172.16.0.0/12') || ip_in_network($host, '192.168.0.0/16')))
 				$hostname = '';
 			else
-				$hostname = gethostbyaddr($host);
+				$hostname = gethostbyaddr($host['addr']);
 		}
 
 		if (isset($_GET['scanhosts']))
